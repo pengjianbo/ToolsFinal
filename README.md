@@ -2,9 +2,9 @@
 添加一些android开发中常用的一些工具类。将会持续更新，敬请期待。
 #下载ToolsFinal
 --------
-下载这个[JAR](https://raw.githubusercontent.com/PaoJiao/ToolsFinal/master/downloads/ToolsFinal-1.0.1-release.jar) 或者通过Gradle抓取:
+下载这个[JAR](https://raw.githubusercontent.com/FinalTeam/ToolsFinal/master/downloads/ToolsFinal-1.0.0-release.jar) 或者通过Gradle抓取:
 ```groovy
-compile 'cn.paojiao.toolsfinal:ToolsFinal:1.0.1'
+compile 'cn.finalteam.toolsfinal:ToolsFinal:1.0.0'
 ```
 ###Android开发常用的工具类
 ####BitmapUtils 

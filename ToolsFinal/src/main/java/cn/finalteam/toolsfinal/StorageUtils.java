@@ -1,4 +1,4 @@
-package cn.paojiao.toolsfinal;
+package cn.finalteam.toolsfinal;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
