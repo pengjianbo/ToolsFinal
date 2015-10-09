@@ -37,6 +37,7 @@ Logger.a(...);
 * 获取字符串长度
 * 字符串UTF8编码
 * 字符串HTML转换
+* 数据库字符转义
 * ...
 
 ####ActivityManager
@@ -176,6 +177,7 @@ AppCacheUtils.get(context).remove(key);
 
 ####ApkUtils
 * 安装某个apk
+* META-INF获取渠道名称
 
 ####JsonFormatUtils
 * JSON格式化

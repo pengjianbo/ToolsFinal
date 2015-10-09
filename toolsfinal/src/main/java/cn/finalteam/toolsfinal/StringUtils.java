@@ -274,4 +274,22 @@ public class StringUtils {
         }
         return new String(source);
     }
+
+    /**
+     * 数据库字符转义
+     * @param keyWord
+     * @return
+     */
+    public static String sqliteEscape(String keyWord){
+        keyWord = keyWord.replace("/", "//");
+        keyWord = keyWord.replace("'", "''");
+        keyWord = keyWord.replace("[", "/[");
+        keyWord = keyWord.replace("]", "/]");
+        keyWord = keyWord.replace("%", "/%");
+        keyWord = keyWord.replace("&","/&");
+        keyWord = keyWord.replace("_", "/_");
+        keyWord = keyWord.replace("(", "/(");
+        keyWord = keyWord.replace(")", "/)");
+        return keyWord;
+    }
 }
