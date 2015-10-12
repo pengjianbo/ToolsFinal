@@ -2,7 +2,7 @@
 添加一些android开发中常用的一些工具类。将会持续更新，敬请期待。
 #下载ToolsFinal
 --------
-下载这个[JAR](https://raw.githubusercontent.com/pengjianbo/ToolsFinal/master/downloads/) 或者通过Gradle抓取:
+下载这个[JAR](https://github.com/pengjianbo/ToolsFinal/tree/master/downloads/) 或者通过Gradle抓取:
 
 ```groovy
 compile 'cn.finalteam:toolsfinal:1.0.4'
