@@ -5,7 +5,7 @@
 下载这个[JAR](https://raw.githubusercontent.com/pengjianbo/ToolsFinal/master/downloads/ToolsFinal-1.0.2-release.jar) 或者通过Gradle抓取:
 
 ```groovy
-compile 'cn.finalteam:toolsfinal:1.0.2'
+compile 'cn.finalteam:toolsfinal:1.0.4'
 ```
 ###Android开发常用的工具类
 ####BitmapUtils 

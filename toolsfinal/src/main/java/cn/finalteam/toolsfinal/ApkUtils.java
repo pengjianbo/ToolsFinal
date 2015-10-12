@@ -92,7 +92,7 @@ public class ApkUtils {
         String[] split = ret.split(channelPrefix);
         String channel = "";
         if (split != null && split.length >= 2) {
-            channel = ret.substring(channelPrefix.length());
+            channel = ret.substring(key.length());
         }
         return channel;
     }
