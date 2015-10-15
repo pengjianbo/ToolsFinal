@@ -15,16 +15,17 @@ public class ManifestUtils {
     /**
      * 获得渠道号
      * @param context
+     * @param channelKey
      * @return
      */
-    public static String getChannelNo(Context context) {
+    public static String getChannelNo(Context context, String channelKey) {
         String name = context.getPackageName();
         ApplicationInfo appInfo;
         String msg = "";
         try {
             appInfo = context.getPackageManager().getApplicationInfo(name,
                     PackageManager.GET_META_DATA);
-            msg = appInfo.metaData.getString("UMENG_CHANNEL");
+            msg = appInfo.metaData.getString(channelKey);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
