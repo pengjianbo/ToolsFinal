@@ -76,13 +76,16 @@ public class Logger {
 
     private static int methodCount = 2;
     private static boolean showThreadInfo = true;
+    private static boolean debugLog = false;
 
     /**
      * It is used to change the tag
      *
      * @param tag is the given string which will be used in Logger
+     * @param debug
      */
-    public static void init(String tag) {
+    public static void init(String tag, boolean debug) {
+        debugLog = debug;
         if (tag == null) {
             throw new NullPointerException("tag may not be null");
         }
@@ -198,7 +201,7 @@ public class Logger {
      * This method is synchronized in order to avoid messy of logs' order.
      */
     private static synchronized void log(int logType, String msg, Object... args) {
-        if (!Constants.DEBUG) {
+        if (!debugLog) {
             return;
         }
         String tag = getTag();
