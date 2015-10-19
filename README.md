@@ -5,7 +5,7 @@
 下载这个[JAR](https://github.com/pengjianbo/ToolsFinal/tree/master/downloads/) 或者通过Gradle抓取:
 
 ```groovy
-compile 'cn.finalteam:toolsfinal:1.0.6'
+compile 'cn.finalteam:toolsfinal:1.0.7'
 ```
 ###Android开发常用的工具类
 ####BitmapUtils 
@@ -45,6 +45,7 @@ Logger.a(...);
 * Activity堆栈
 * finish指定Activity
 * finish所有Activity
+* 获取堆某个Activity
 * 退出App
 
 ```java
@@ -259,6 +260,19 @@ byte[] result = RSAUtils.decryptByPublicKey(byte[] publicKey, byte[] data,PADDIN
 byte[] result = RSAUtils.decryptByPrivateKey(byte[] publicKey, byte[] privateKey, byte[] data,PADDING padding)
 ```
 
+####定时器
+解决系统的CountDownTimer cancel失效问题
+
+```java
+    new CountdownTimer(30000, 1000) {
+         public void onTick(long millisUntilFinished) {
+            mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+         }
+         public void onFinish() {
+            mTextField.setText("done!");
+         }
+     }.start();
+```
 
 License
 -------
