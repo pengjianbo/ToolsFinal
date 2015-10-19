@@ -2,6 +2,7 @@ package cn.finalteam.toolsfinal;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import java.util.Iterator;
 import java.util.Stack;
 
@@ -105,6 +106,22 @@ public class ActivityManager {
             }
         }
         activityStack.clear();
+    }
+
+    /**
+     * 根据ActivityName获取堆中Activity实例
+     * @param activityName
+     * @return
+     */
+    public Activity getActivity(String activityName) {
+        Iterator<Activity> iterator = activityStack.iterator();
+        while (iterator.hasNext()) {
+            Activity activity = iterator.next();
+            if(activity != null && TextUtils.equals(activity.getClass().getName(), activityName)){
+                return activity;
+            }
+        }
+        return null;
     }
 
     /**
