@@ -5,7 +5,7 @@
 下载这个[JAR](https://github.com/pengjianbo/ToolsFinal/tree/master/downloads/) 或者通过Gradle抓取:
 
 ```groovy
-compile 'cn.finalteam:toolsfinal:1.0.7'
+compile 'cn.finalteam:toolsfinal:1.0.8'
 ```
 ###Android开发常用的工具类
 ####BitmapUtils 
@@ -40,6 +40,18 @@ Logger.a(...);
 * 字符串HTML转换
 * 数据库字符转义
 * ...
+
+####CrashHanlder
+* crash信息抓取
+* 自定义crash存储路径
+* 设置crash事件回调
+
+```java    
+CrashHandler.getInstance().init(this)
+                .setOnCrashListener(...)
+                .setCrashSave(true)
+                .setCrashSaveTargetFolder("/sdcard/crash");
+```
 
 ####ActivityManager
 * Activity堆栈
@@ -128,6 +140,7 @@ AppCacheUtils.get(context).remove(key);
 * 判断某个app是否安装了
 * dp px转换
 * 获取system bar高度
+* 获取navigation bar高度
 * 输入法隐藏和显示
 * 启动某个应用下的Activity
 * ...
@@ -172,20 +185,62 @@ AppCacheUtils.get(context).remove(key);
 ####StorageUtils
 * 缓冲目录工具类
 
+```java
+File cacheDir = StorageUtils.getCacheDirectory(context);///Android/data/packageName/cache
+....
+```
+
+####ExternalStorage
+* 如果一个手机中有多个sdcard卡可以用到此工具
+
+```java
+Map<String, File> storageMap = ExternalStorage.getAllStorageLocations();
+```
+
 ####ManifestUtils
 * 获取app版本号
+* 获取Meta Data数据
 * 获取app版本名称
 * 获取app渠道名
 
+```java
+ManifestUtils.getMetaData(context, metaKey);
+ManifestUtils.getChannelNo(context, channelKey);
+ManifestUtils.getVersionName(context);
+ManifestUtils.getVersionCode(context);
+```
+
 ####ApkUtils
 * 安装某个apk
+* 卸载app
 * META-INF获取渠道名称
 
+```java
+ApkUtils.getChannelFromApk(context, channelPrefix)//META-INF识别渠道
+ApkUtils.install(context, apkFile);//安装
+ApkUtils.uninstall(context, packageName);//卸载
+```
+
 ####JsonFormatUtils
-* JSON格式化
+* JSON格式化显示
+
+```java
+String formatJson = JsonFormatUtils.formatJson(json);
+```
 
 ####JsonValidator
 * JSON合法性验证
+
+```java
+boolean valid = JsonValidator.validate(json);
+```
+
+####MD5
+* md5编码工具
+
+```java
+String result = MD5Utils.getMD5Code(source);
+```
 
 ####Base64Util
 * base64编码/解码
@@ -274,6 +329,53 @@ byte[] result = RSAUtils.decryptByPrivateKey(byte[] publicKey, byte[] privateKey
      }.start();
 ```
 
+####ResourceUtils
+* 通过资源名称获取资源ID
+
+```java
+ResourceUtils.getLayoutId(context, resName);
+ResourceUtils.getStringId(context, resName);
+ResourceUtils.getDrawableId(context, resName);
+ResourceUtils.getMipmapId(context, resName);
+ResourceUtils.getStyleId(context, resName);
+ResourceUtils.getStyleableId(context, resName);
+ResourceUtils.getAnimId(context, resName);
+ResourceUtils.getId(context, resName);
+ResourceUtils.getColorId(context, resName);
+```
+
+####ShellUtils
+* shell相关工具
+
+```java
+ShellUtils.execCommand(String, boolean)
+ShellUtils.execCommand(String, boolean, boolean)
+ShellUtils.execCommand(List, boolean)
+ShellUtils.execCommand(List, boolean, boolean)
+ShellUtils.execCommand(String[], boolean)
+ShellUtils.execCommand(String[], boolean, boolean)
+```
+
+
+#权限
+大家根据自己使用了哪些工具，分别添加相关权限即可
+
+```xml
+	<!--在SDCard中创建与删除文件权限-->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <!--往SDCard写入数据权限-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!--从SDCard读取数据权限-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!--读取设备信息权限-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--获取WIFI权限-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!--获取手机任务信息（进程,app列表）-->
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <!--检查是否wifi网络 (CrashHanler保存日志信息用到)-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+```
 License
 -------
 
