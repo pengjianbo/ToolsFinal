@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -388,13 +389,29 @@ public class DeviceUtils {
      * @return
      */
     public static int getStatusBarHeight(Context context){
-        int result=0;
+        int height = 0;
         int resourceId= context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if(resourceId >0) {
-            result = context.getResources().getDimensionPixelSize(resourceId);
+        if(resourceId > 0) {
+            height = context.getResources().getDimensionPixelSize(resourceId);
         }
 
-        return result;
+        return height;
+    }
+
+    /**
+     * 获取navigationbar高度
+     * @param context
+     * @return
+     */
+    public static int getNavigationBarHeight(Context context) {
+        int height = 0;
+        Resources resources = context.getResources();
+        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+        //获取NavigationBar的高度
+        if(resourceId > 0) {
+            height = resources.getDimensionPixelSize(resourceId);
+        }
+        return height;
     }
 
 
