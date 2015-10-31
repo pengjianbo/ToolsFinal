@@ -13,5 +13,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!--获取手机任务信息（进程,app列表）-->
     <uses-permission android:name="android.permission.GET_TASKS"/>
+    <!-- 检查是否wifi网络 (CrashHanler保存日志信息用到) -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>
