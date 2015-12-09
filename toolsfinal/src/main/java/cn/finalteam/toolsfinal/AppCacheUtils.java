@@ -34,6 +34,9 @@ public class AppCacheUtils {
 
     private AppCacheUtils(File cacheFile) {
         mCacheFile =  cacheFile;
+        if(!mCacheFile.exists()) {
+            FileUtils.makeDirs(mCacheFile.getAbsolutePath() + "/temp.file");
+        }
     }
 
     public static AppCacheUtils getInstance(Context ctx) {
