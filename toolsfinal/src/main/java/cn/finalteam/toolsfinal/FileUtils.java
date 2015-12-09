@@ -49,9 +49,9 @@ import java.util.List;
 public class FileUtils {
 
     public final static String FILE_EXTENSION_SEPARATOR = ".";
-    private static final double KB = 1024.0;
-    private static final double MB = KB * KB;
-    private static final double GB = KB * KB * KB;
+    public static final double KB = 1024.0;
+    public static final double MB = KB * KB;
+    public static final double GB = KB * KB * KB;
 
     private FileUtils() {
         throw new AssertionError();

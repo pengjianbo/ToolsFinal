@@ -5,7 +5,7 @@
 下载这个[JAR](https://github.com/pengjianbo/ToolsFinal/tree/master/downloads/) 或者通过Gradle抓取:
 
 ```groovy
-compile 'cn.finalteam:toolsfinal:1.0.8'
+compile 'cn.finalteam:toolsfinal:1.1.0'
 ```
 ###Android开发常用的工具类
 ####BitmapUtils 
@@ -80,29 +80,27 @@ ActivityManager.getActivityManager().appExit(this);
 
 ```java
 //存储
-AppCacheUtils.get(context).put(key, int);
-AppCacheUtils.get(context).put(key, String);
-AppCacheUtils.get(context).put(key, char);
-AppCacheUtils.get(context).put(key, float);
-AppCacheUtils.get(context).put(key, double);
-AppCacheUtils.get(context).put(key, boolean);
-AppCacheUtils.get(context).put(key, byte[]);
-AppCacheUtils.get(context).put(key, Bitmap);
-AppCacheUtils.get(context).put(key, JSONObject);
-AppCacheUtils.get(context).put(key, Serializable);
+AppCacheUtils.getInstance(context).put(key, int);
+AppCacheUtils.getInstance(context).put(key, String);
+AppCacheUtils.getInstance(context).put(key, char);
+AppCacheUtils.getInstance(context).put(key, float);
+AppCacheUtils.getInstance(context).put(key, double);
+AppCacheUtils.getInstance(context).put(key, boolean);
+AppCacheUtils.getInstance(context).put(key, byte[]);
+AppCacheUtils.getInstance(context).put(key, JSONObject);
+AppCacheUtils.getInstance(context).put(key, Serializable);
 ...
 ```
 ```java
 //获取
-AppCacheUtils.get(context).getInt(key, intDefault);
-AppCacheUtils.get(context).getString(key, stringDefault);
-AppCacheUtils.get(context).getChar(key, charDefault);
-AppCacheUtils.get(context).getFloat(key, floatDefault);
-AppCacheUtils.get(context).getDouble(key, doubleDefault);
-AppCacheUtils.get(context).getBoolean(key, booleanDefault);
-AppCacheUtils.get(context).getBitmap(key);
-AppCacheUtils.get(context).getJSONObject(key);
-AppCacheUtils.get(context).getObject(key);
+AppCacheUtils.getInstance(context).getInt(key, intDefault);
+AppCacheUtils.getInstance(context).getString(key, stringDefault);
+AppCacheUtils.getInstance(context).getChar(key, charDefault);
+AppCacheUtils.getInstance(context).getFloat(key, floatDefault);
+AppCacheUtils.getInstance(context).getDouble(key, doubleDefault);
+AppCacheUtils.getInstance(context).getBoolean(key, booleanDefault);
+AppCacheUtils.getInstance(context).getJSONObject(key);
+AppCacheUtils.getInstance(context).getObject(key);
 ...
 ```
 ```java
@@ -239,7 +237,7 @@ boolean valid = JsonValidator.validate(json);
 * md5编码工具
 
 ```java
-String result = MD5Utils.getMD5Code(source);
+String result = MD5Coder.getMD5Code(source);
 ```
 
 ####Base64Util
@@ -247,28 +245,75 @@ String result = MD5Utils.getMD5Code(source);
 
 ```java
 //解码
-byte[] srcBytes = Base64Utils.decode(byte[] decodeBytes, flag)
-byte[] srcBytes = Base64Utils.decode(String decodeString, flag)
-byte[] srcBytes = Base64Utils.decode(byte[] decodeBytes, int offset, int len, int flags)
+byte[] srcBytes = Base64Coder.decode(byte[] decodeBytes, flag)
+byte[] srcBytes = Base64Coder.decode(String decodeString, flag)
+byte[] srcBytes = Base64Coder.decode(byte[] decodeBytes, int offset, int len, int flags)
 ...
 //编码
-byte[] decodeBytes = Base64Utils.encode(byte[] src, flag)
-byte[] decodeBytes = Base64Utils.encode(String src, flag)
-String decodeString = Base64Utils.encodeToString(byte[] src, flag)
-byte[] decodeBytes = Base64Utils.encode(byte[] src, int offset, int len, int flags)
+byte[] decodeBytes = Base64Coder.encode(byte[] src, flag)
+byte[] decodeBytes = Base64Coder.encode(String src, flag)
+String decodeString = Base64Coder.encodeToString(byte[] src, flag)
+byte[] decodeBytes = Base64Coder.encode(byte[] src, int offset, int len, int flags)
 ...
 ```
 
-####Des3Coder DesCoder
+###AESCoder
 * 对称加密算法
 
 ```java
 //加密
-Des3Coder.encrypt(byte[] msg, String key)//三层DES加密
-DesCoder.encrypt(byte[] msg, String key)
+String password = "password";
+String message = "hello world"; 
+try {
+    String encryptedMsg = AESCoder.encrypt(password, message);
+}catch (GeneralSecurityException e){
+  //handle error
+}
+
 //解密
-Des3Coder.decrypt(byte[] msg, String key)
-DesCoder.decrypt(byte[] msg, String key)
+String password = "password";
+String encryptedMsg = "2B22cS3UC5s35WBihLBo8w==";
+try {
+    String messageAfterDecrypt = AESCoder.decrypt(password, encryptedMsg);
+}catch (GeneralSecurityException e){
+ //handle error - could be due to incorrect password or tampered encryptedMsg
+}
+```
+
+####DESCoder
+* 对称加密算法
+
+```java
+//加密
+byte[] encrypt = DESCoder.encrypt("Hello World".getBytes(), "password");
+Logger.d("encrypt=" + HexCoder.encodeHexString(encrypt));
+//解密
+byte[] decrypt = DESCoder.decrypt(encrypt, "password");
+Logger.d("decrypt=" + new String(decrypt));
+```
+
+####DES3Coder
+* 对称加密算法
+
+```java
+//加密
+byte[] encrypt = DES3Coder.encryptMode("Hello World".getBytes(), "password");
+Logger.d("encrypt=" + HexCoder.encodeHexString(encrypt));
+//解密
+byte[] decrypt = DES3Coder.decryptMode(encrypt, "password");
+Logger.d("decrypt=" + new String(decrypt));
+```
+####HexCoder
+* 16进制编码
+
+```java
+//byte[]转16进制
+char[] encodeHex(byte[] data)
+//byte[]转16进制（大写）
+char[] encodeHex(byte[] data, boolean toLowerCase)
+//byte[]转16进制字符输出
+String encodeHexString(byte[] data)
+....
 ```
     
 ####EncodeUtils
@@ -291,28 +336,29 @@ EncodeUtils.encodeHex(String str)
 EncodeUtils.decodeHex(String bytes)
 ```
 
-####RSAUtils
+####RSACoder
+* 非对称加密算法
 * RSA 工具类。提供加密，解密，生成密钥对等方法。
 
 ```java
 //生成密钥对
-KeyPair key = RSAUtils.generateKeyPair()
+KeyPair key = RSACoder.generateKeyPair()
 //生成公钥
-RSAPublicKey key = RSAUtils.generateRSAPublicKey(byte[] modulus, byte[] publicExponent)
+RSAPublicKey key = RSACoder.generateRSAPublicKey(byte[] modulus, byte[] publicExponent)
 //生成私钥
-RSAPrivateKey key = RSAUtils.generateRSAPrivateKey(byte[] modulus, byte[] privateExponent)
+RSAPrivateKey key = RSACoder.generateRSAPrivateKey(byte[] modulus, byte[] privateExponent)
 //加密
-byte[] result = RSAUtils.encrypt(Key key, byte[] data,PADDING padding)
+byte[] result = RSACoder.encrypt(Key key, byte[] data,PADDING padding)
 //公钥加密
-byte[] result = RSAUtils.encryptByPublicKey(byte[] publicKey, byte[] data,PADDING padding)
+byte[] result = RSACoder.encryptByPublicKey(byte[] publicKey, byte[] data,PADDING padding)
 //私钥加密
-byte[] result = RSAUtils.encryptByPrivateKey(byte[] publicKey, byte[] privateKey, byte[] data,PADDING padding)
+byte[] result = RSACoder.encryptByPrivateKey(byte[] publicKey, byte[] privateKey, byte[] data,PADDING padding)
 //解密
-byte[] result = RSAUtils.decrypt(Key key, byte[] data,PADDING padding)
+byte[] result = RSACoder.decrypt(Key key, byte[] data,PADDING padding)
 //公钥解密
-byte[] result = RSAUtils.decryptByPublicKey(byte[] publicKey, byte[] data,PADDING padding)
+byte[] result = RSACoder.decryptByPublicKey(byte[] publicKey, byte[] data,PADDING padding)
 //私钥解密
-byte[] result = RSAUtils.decryptByPrivateKey(byte[] publicKey, byte[] privateKey, byte[] data,PADDING padding)
+byte[] result = RSACoder.decryptByPrivateKey(byte[] publicKey, byte[] privateKey, byte[] data,PADDING padding)
 ```
 
 ####定时器
