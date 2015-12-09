@@ -1,4 +1,4 @@
-package cn.finalteam.toolsfinal;
+package cn.finalteam.toolsfinal.coder;
 
 import java.io.UnsupportedEncodingException;
 
@@ -7,7 +7,7 @@ import java.io.UnsupportedEncodingException;
  * Author:pengjianbo
  * Date:15/9/22 下午7:36
  */
-public class Base64Utils {
+public class Base64Coder {
     /**
      * Default values for encoder/decoder flags.
      */
@@ -49,7 +49,7 @@ public class Base64Utils {
     // shared code
     // --------------------------------------------------------
 
-    private Base64Utils() {
+    private Base64Coder() {
     } // don't instantiate
 
     // --------------------------------------------------------

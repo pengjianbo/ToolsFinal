@@ -1,4 +1,4 @@
-package cn.finalteam.toolsfinal;
+package cn.finalteam.toolsfinal.coder;
 
 import java.math.BigInteger;
 import java.security.Key;
@@ -18,7 +18,7 @@ import javax.crypto.Cipher;
  * Author:pengjianbo
  * Date:15/9/22 下午7:47
  */
-public class RSAUtils {
+public class RSACoder {
     /**
      * 填充方式
      */
