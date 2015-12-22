@@ -403,4 +403,14 @@ public class AppCacheUtils {
     private File newFile(String key) {
         return new File(mCacheFile, MD5Coder.getMD5Code(key));
     }
+
+    /**
+     * 移除缓存
+     * @param key
+     */
+    public void remove(String key) {
+        try {
+            newFile(key).delete();
+        } catch (Exception e){}
+    }
 }
