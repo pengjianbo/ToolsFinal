@@ -16,6 +16,7 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Environment;
@@ -24,9 +25,11 @@ import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import java.io.File;
 import java.math.BigInteger;
@@ -45,6 +48,31 @@ import java.util.Map;
  * Date:15/9/17 下午4:21
  */
 public class DeviceUtils {
+
+    /**
+     * Unknown network class
+     */
+    public static final int NETWORK_CLASS_UNKNOWN = 0;
+
+    /**
+     * wifi net work
+     */
+    public static final int NETWORK_WIFI = 1;
+
+    /**
+     * "2G" networks
+     */
+    public static final int NETWORK_CLASS_2_G = 2;
+
+    /**
+     * "3G" networks
+     */
+    public static final int NETWORK_CLASS_3_G = 3;
+
+    /**
+     * "4G" networks
+     */
+    public static final int NETWORK_CLASS_4_G = 4;
 
     /**
      * 判断SDCard是否可用
@@ -391,7 +419,7 @@ public class DeviceUtils {
     public static int getStatusBarHeight(Context context){
         int height = 0;
         int resourceId= context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if(resourceId > 0) {
+        if (resourceId > 0) {
             height = context.getResources().getDimensionPixelSize(resourceId);
         }
 
@@ -412,6 +440,17 @@ public class DeviceUtils {
             height = resources.getDimensionPixelSize(resourceId);
         }
         return height;
+    }
+
+    /**
+     * 获取状态栏高度＋标题栏(ActionBar)高度
+     * (注意，如果没有ActionBar，那么获取的高度将和上面的是一样的，只有状态栏的高度)
+     * @param activity
+     * @return
+     */
+    public static int getTopBarHeight(Activity activity) {
+        return activity.getWindow().findViewById(Window.ID_ANDROID_CONTENT)
+                .getTop();
     }
 
 
@@ -496,5 +535,130 @@ public class DeviceUtils {
     public static boolean isActiveSoftInput(Context context) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         return imm.isActive();
+    }
+
+    /**
+     * 主动回到Home，后台运行
+     * @param context
+     */
+    public static void goHome(Context context) {
+        Intent mHomeIntent = new Intent(Intent.ACTION_MAIN);
+        mHomeIntent.addCategory(Intent.CATEGORY_HOME);
+        mHomeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        context.startActivity(mHomeIntent);
+    }
+
+    /**
+     * 返回移动终端类型
+     * PHONE_TYPE_NONE :0 手机制式未知
+     * PHONE_TYPE_GSM :1 手机制式为GSM，移动和联通
+     * PHONE_TYPE_CDMA :2 手机制式为CDMA，电信
+     * PHONE_TYPE_SIP:3
+     * @param context
+     * @return
+     */
+    public static int getPhoneType(Context context) {
+        TelephonyManager telephonyManager = (TelephonyManager) context
+                .getSystemService(Context.TELEPHONY_SERVICE);
+        return telephonyManager.getPhoneType();
+    }
+
+    /**
+     * 判断手机连接的网络类型(wifi,2G,3G,4G)
+     * 联通的3G为UMTS或HSDPA，移动和联通的2G为GPRS或EGDE，电信的2G为CDMA，电信的3G为EVDO
+     * @param context
+     * @return
+     */
+    public static int getNetType(Context context) {
+        int netWorkType = NETWORK_CLASS_UNKNOWN;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnected()) {
+            int type = networkInfo.getType();
+
+            if (type == ConnectivityManager.TYPE_WIFI) {
+                netWorkType = NETWORK_WIFI;
+            } else if (type == ConnectivityManager.TYPE_MOBILE) {
+                TelephonyManager telephonyManager = (TelephonyManager) context
+                        .getSystemService(Context.TELEPHONY_SERVICE);
+                switch (telephonyManager.getNetworkType()) {
+                    case TelephonyManager.NETWORK_TYPE_GPRS:
+                    case TelephonyManager.NETWORK_TYPE_EDGE:
+                    case TelephonyManager.NETWORK_TYPE_CDMA:
+                    case TelephonyManager.NETWORK_TYPE_1xRTT:
+                    case TelephonyManager.NETWORK_TYPE_IDEN:
+                        return  NETWORK_CLASS_2_G;
+                    case TelephonyManager.NETWORK_TYPE_UMTS:
+                    case TelephonyManager.NETWORK_TYPE_EVDO_0:
+                    case TelephonyManager.NETWORK_TYPE_EVDO_A:
+                    case TelephonyManager.NETWORK_TYPE_HSDPA:
+                    case TelephonyManager.NETWORK_TYPE_HSUPA:
+                    case TelephonyManager.NETWORK_TYPE_HSPA:
+                    case TelephonyManager.NETWORK_TYPE_EVDO_B:
+                    case TelephonyManager.NETWORK_TYPE_EHRPD:
+                    case TelephonyManager.NETWORK_TYPE_HSPAP:
+                        return NETWORK_CLASS_3_G;
+
+                    case TelephonyManager.NETWORK_TYPE_LTE:
+                        return NETWORK_CLASS_4_G;
+                    default:
+                        return NETWORK_CLASS_UNKNOWN;
+                }
+            }
+        }
+
+        return netWorkType;
+    }
+
+    /**
+     * 拨打电话
+     * @param context
+     * @param phoneNumber 电话号码
+     */
+    public static void callPhone(Context context, String phoneNumber) {
+        context.startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber)));
+    }
+
+    /**
+     * 跳转至拨号界面
+     * @param context
+     * @param phoneNumber 电话号码电话号码
+     */
+    public static void callDial(Context context, String phoneNumber) {
+        context.startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNumber)));
+    }
+
+    /**
+     * 发送短信
+     * @param context
+     * @param phoneNumber
+     * @param content
+     */
+    public static void sendSms(Context context, String phoneNumber,
+            String content) {
+        Uri uri = Uri.parse("smsto:"
+                + (TextUtils.isEmpty(phoneNumber) ? "" : phoneNumber));
+        Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+        intent.putExtra("sms_body", TextUtils.isEmpty(content) ? "" : content);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 判断当前设备是否为手机
+     * @param context
+     * @return
+     */
+    public static boolean isPhone(Context context) {
+        TelephonyManager telephony = (TelephonyManager) context
+                .getSystemService(Context.TELEPHONY_SERVICE);
+        if (telephony.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

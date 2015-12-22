@@ -5,7 +5,7 @@
 下载这个[JAR](https://github.com/pengjianbo/ToolsFinal/tree/master/downloads/) 或者通过Gradle抓取:
 
 ```groovy
-compile 'cn.finalteam:toolsfinal:1.1.0'
+compile 'cn.finalteam:toolsfinal:1.1.1'
 ```
 ###Android开发常用的工具类
 ####BitmapUtils 
@@ -141,6 +141,10 @@ AppCacheUtils.get(context).remove(key);
 * 获取navigation bar高度
 * 输入法隐藏和显示
 * 启动某个应用下的Activity
+* 返回Home
+* 获取网络类型
+* 拨打电话
+* 发送短信
 * ...
 
 ####FileUtils
@@ -233,6 +237,49 @@ String formatJson = JsonFormatUtils.formatJson(json);
 boolean valid = JsonValidator.validate(json);
 ```
 
+####定时器
+解决系统的CountDownTimer cancel失效问题
+
+```java
+    new CountdownTimer(30000, 1000) {
+         public void onTick(long millisUntilFinished) {
+            mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+         }
+         public void onFinish() {
+            mTextField.setText("done!");
+         }
+     }.start();
+```
+
+####ResourceUtils
+* 通过资源名称获取资源ID
+
+```java
+ResourceUtils.getLayoutId(context, resName);
+ResourceUtils.getStringId(context, resName);
+ResourceUtils.getDrawableId(context, resName);
+ResourceUtils.getMipmapId(context, resName);
+ResourceUtils.getStyleId(context, resName);
+ResourceUtils.getStyleableId(context, resName);
+ResourceUtils.getAnimId(context, resName);
+ResourceUtils.getId(context, resName);
+ResourceUtils.getColorId(context, resName);
+```
+
+####ShellUtils
+* shell相关工具
+
+```java
+ShellUtils.execCommand(String, boolean)
+ShellUtils.execCommand(String, boolean, boolean)
+ShellUtils.execCommand(List, boolean)
+ShellUtils.execCommand(List, boolean, boolean)
+ShellUtils.execCommand(String[], boolean)
+ShellUtils.execCommand(String[], boolean, boolean)
+```
+
+---
+###加/解密和编码
 ####MD5
 * md5编码工具
 
@@ -360,47 +407,17 @@ byte[] result = RSACoder.decryptByPublicKey(byte[] publicKey, byte[] data,PADDIN
 //私钥解密
 byte[] result = RSACoder.decryptByPrivateKey(byte[] publicKey, byte[] privateKey, byte[] data,PADDING padding)
 ```
+---
 
-####定时器
-解决系统的CountDownTimer cancel失效问题
+###Adapter
+#### ViewHolderAdapter
+BaseAdapter ViewHolder优化版Adapter
 
-```java
-    new CountdownTimer(30000, 1000) {
-         public void onTick(long millisUntilFinished) {
-            mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
-         }
-         public void onFinish() {
-            mTextField.setText("done!");
-         }
-     }.start();
-```
+#### FragmentAdapter
+Fragment page adapter
 
-####ResourceUtils
-* 通过资源名称获取资源ID
-
-```java
-ResourceUtils.getLayoutId(context, resName);
-ResourceUtils.getStringId(context, resName);
-ResourceUtils.getDrawableId(context, resName);
-ResourceUtils.getMipmapId(context, resName);
-ResourceUtils.getStyleId(context, resName);
-ResourceUtils.getStyleableId(context, resName);
-ResourceUtils.getAnimId(context, resName);
-ResourceUtils.getId(context, resName);
-ResourceUtils.getColorId(context, resName);
-```
-
-####ShellUtils
-* shell相关工具
-
-```java
-ShellUtils.execCommand(String, boolean)
-ShellUtils.execCommand(String, boolean, boolean)
-ShellUtils.execCommand(List, boolean)
-ShellUtils.execCommand(List, boolean, boolean)
-ShellUtils.execCommand(String[], boolean)
-ShellUtils.execCommand(String[], boolean, boolean)
-```
+#### RecyclingPagerAdapter
+可回收的PagerAdapter
 
 
 #权限
