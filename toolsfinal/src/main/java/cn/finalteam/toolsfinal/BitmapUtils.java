@@ -383,16 +383,27 @@ public class BitmapUtils {
     /**
      * 质量压缩图片
      * @param imageFile
+     * @param targetFile
      * @param qualityCompress
      * @param maxSize
      */
-    public static void compressImage(String imageFile, boolean qualityCompress, long maxSize) {
+    public static void compressImage(String imageFile, String targetFile, boolean qualityCompress, long maxSize) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(imageFile, options);
         int targetWidth = options.outWidth / 2;
         int targeHeight = options.outHeight / 2;
-        compressImage(imageFile, qualityCompress, maxSize, targetWidth, targeHeight);
+        compressImage(imageFile, targetFile, qualityCompress, maxSize, targetWidth, targeHeight);
+    }
+
+    /**
+     * 质量压缩图片
+     * @param imageFile
+     * @param qualityCompress
+     * @param maxSize
+     */
+    public static void compressImage(String imageFile, boolean qualityCompress, long maxSize) {
+        compressImage(imageFile, null, qualityCompress, maxSize);
     }
 
     /**
