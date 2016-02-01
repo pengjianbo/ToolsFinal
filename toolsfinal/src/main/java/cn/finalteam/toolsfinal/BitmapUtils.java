@@ -19,6 +19,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import cn.finalteam.toolsfinal.io.FileUtils;
+
 /**
  * Desction:Bitmap工具类
  * Author:pengjianbo
