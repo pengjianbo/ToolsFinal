@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Looper;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -222,7 +223,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler{
                     dir = new File(mCrashSaveTargetFolder);
                 }
 
-                Logger.i("Crash save target=" + dir.toString());
                 if (!dir.exists()) {
                     dir.mkdir();
                 }
