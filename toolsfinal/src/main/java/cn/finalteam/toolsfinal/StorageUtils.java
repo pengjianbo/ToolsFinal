@@ -3,6 +3,7 @@ package cn.finalteam.toolsfinal;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Environment;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -13,7 +14,8 @@ import static android.os.Environment.MEDIA_MOUNTED;
  * Author:pengjianbo
  * Date:15/9/17 下午4:41
  */
-public class StorageUtils {
+public final class StorageUtils {
+
     private static final String EXTERNAL_STORAGE_PERMISSION = "android.permission.WRITE_EXTERNAL_STORAGE";
     private static final String INDIVIDUAL_DIR_NAME = "cache";
 
@@ -28,10 +30,14 @@ public class StorageUtils {
      * @param context Application context
      * @return Cache {@link File directory}.<br />
      * <b>NOTE:</b> Can be null in some unpredictable cases (if SD card is unmounted and
-     * {@link Context#getCacheDir() Context.getCacheDir()} returns null).
+     * {@link android.content.Context#getCacheDir() Context.getCacheDir()} returns null).
      */
     public static File getCacheDirectory(Context context) {
-        return getCacheDirectory(context, true);
+        return getCacheDirectory(context, true, "cache");
+    }
+
+    public static File getCacheDirectory(Context context, boolean isCache, String customDir) {
+        return getCacheDirectory(context, true, isCache, customDir);
     }
 
     /**
@@ -43,9 +49,9 @@ public class StorageUtils {
      * @param preferExternal Whether prefer external location for cache
      * @return Cache {@link File directory}.<br />
      * <b>NOTE:</b> Can be null in some unpredictable cases (if SD card is unmounted and
-     * {@link Context#getCacheDir() Context.getCacheDir()} returns null).
+     * {@link android.content.Context#getCacheDir() Context.getCacheDir()} returns null).
      */
-    public static File getCacheDirectory(Context context, boolean preferExternal) {
+    public static File getCacheDirectory(Context context, boolean preferExternal, boolean cache, String customDir) {
         File appCacheDir = null;
         String externalStorageState;
         try {
@@ -56,14 +62,15 @@ public class StorageUtils {
             externalStorageState = "";
         }
         if (preferExternal && MEDIA_MOUNTED.equals(externalStorageState) && hasExternalStoragePermission(context)) {
-            appCacheDir = getExternalCacheDir(context);
+            appCacheDir = getExternalCacheDir(context, cache, customDir);
         }
         if (appCacheDir == null) {
             appCacheDir = context.getCacheDir();
         }
         if (appCacheDir == null) {
-            String cacheDirPath = "/data/data/" + context.getPackageName() + "/cache/";
-            Logger.w("Can't define system cache directory! " + cacheDirPath + " will be used.");
+            String cacheDirPath;
+            cacheDirPath = "/data/data/" + context.getPackageName() + "/" + customDir + "/";
+
             appCacheDir = new File(cacheDirPath);
         }
         return appCacheDir;
@@ -139,18 +146,16 @@ public class StorageUtils {
         return appCacheDir;
     }
 
-    private static File getExternalCacheDir(Context context) {
+    private static File getExternalCacheDir(Context context, boolean cache, String customDir) {
         File dataDir = new File(new File(Environment.getExternalStorageDirectory(), "Android"), "data");
-        File appCacheDir = new File(new File(dataDir, context.getPackageName()), "cache");
+        File appCacheDir = new File(new File(dataDir, context.getPackageName()), customDir);
         if (!appCacheDir.exists()) {
             if (!appCacheDir.mkdirs()) {
-                Logger.w("Unable to create external cache directory");
                 return null;
             }
             try {
                 new File(appCacheDir, ".nomedia").createNewFile();
             } catch (IOException e) {
-                Logger.i("Can't create \".nomedia\" file in application external cache directory");
             }
         }
         return appCacheDir;

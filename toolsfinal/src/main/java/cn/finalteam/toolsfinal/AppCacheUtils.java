@@ -2,6 +2,8 @@ package cn.finalteam.toolsfinal;
 
 import android.content.Context;
 import cn.finalteam.toolsfinal.coder.MD5Coder;
+import cn.finalteam.toolsfinal.io.FileUtils;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -34,13 +36,11 @@ public class AppCacheUtils {
 
     private AppCacheUtils(File cacheFile) {
         mCacheFile =  cacheFile;
-        if(!mCacheFile.exists()) {
-            FileUtils.makeDirs(mCacheFile.getAbsolutePath() + "/temp.file");
-        }
+        FileUtils.mkdirs(cacheFile);
     }
 
     public static AppCacheUtils getInstance(Context ctx) {
-        return getInstance(new File(StorageUtils.getCacheDirectory(ctx), DEFAULT_CACHE_NAME));
+        return getInstance(StorageUtils.getIndividualCacheDirectory(ctx));
     }
 
     public static AppCacheUtils getInstance(String path, String cacheDirName) {
@@ -48,7 +48,7 @@ public class AppCacheUtils {
     }
 
     public static AppCacheUtils getInstance(Context ctx, String cacheDirName) {
-        return getInstance(new File(StorageUtils.getCacheDirectory(ctx), cacheDirName));
+        return getInstance(new File(StorageUtils.getIndividualCacheDirectory(ctx), cacheDirName));
     }
 
     public static AppCacheUtils getInstance(File file) {
