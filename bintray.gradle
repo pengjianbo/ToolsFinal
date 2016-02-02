@@ -78,12 +78,6 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
-task deleteBuildConfig << {
-    String path = fileTree(dir: './build/intermediates/classes/release').asPath;
-    File file = new File(path, "cn/finalteam/toolsfinal/BuildConfig.class")
-    file.delete();
-}
-
 javadoc {
     options{
         encoding "UTF-8"
