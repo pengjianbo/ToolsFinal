@@ -22,8 +22,6 @@ compile 'cn.finalteam:toolsfinal:1.1.4'
 * 日志定位
 
 ```java
-Logger.init(TAG, DEBUG);
-
 Logger.d(...);
 Logger.i(...);
 Logger.e(...);
