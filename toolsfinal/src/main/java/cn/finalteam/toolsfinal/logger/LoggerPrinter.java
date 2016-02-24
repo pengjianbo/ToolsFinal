@@ -116,7 +116,7 @@ public final class LoggerPrinter implements Printer {
 
     @Override
     public void e(Throwable throwable) {
-        e(throwable);
+        e(throwable, null);
     }
 
     @Override

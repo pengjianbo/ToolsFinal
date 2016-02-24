@@ -27,5 +27,7 @@ public class MainActivity extends AppCompatActivity {
         ILogger.d("decrypt=" + new String(decrypt));
 
         AppCacheUtils.getInstance(this).put("myKey", "myValue");
+
+        ILogger.e(new RuntimeException("test"));
     }
 }
