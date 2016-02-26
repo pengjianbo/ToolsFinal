@@ -1,8 +1,9 @@
 package cn.finalteam.toolsfinal;
 
 import android.content.Context;
-import cn.finalteam.toolsfinal.coder.MD5Coder;
-import cn.finalteam.toolsfinal.io.FileUtils;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,8 +20,9 @@ import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
+import cn.finalteam.toolsfinal.coder.MD5Coder;
+import cn.finalteam.toolsfinal.io.FileUtils;
 
 /**
  * Desction:数据/配置存储类
@@ -28,6 +30,7 @@ import org.json.JSONObject;
  * Date:15/9/17 下午4:41
  */
 public class AppCacheUtils {
+
 
     public static final String DEFAULT_CACHE_NAME = "appCache";
 
@@ -40,15 +43,8 @@ public class AppCacheUtils {
     }
 
     public static AppCacheUtils getInstance(Context ctx) {
-        return getInstance(StorageUtils.getIndividualCacheDirectory(ctx));
-    }
-
-    public static AppCacheUtils getInstance(String path, String cacheDirName) {
-        return getInstance(new File(path, cacheDirName));
-    }
-
-    public static AppCacheUtils getInstance(Context ctx, String cacheDirName) {
-        return getInstance(new File(StorageUtils.getIndividualCacheDirectory(ctx), cacheDirName));
+        File storeFile = StorageUtils.getCacheDirectory(ctx, false, DEFAULT_CACHE_NAME);
+        return getInstance(storeFile);
     }
 
     public static AppCacheUtils getInstance(File file) {
@@ -88,11 +84,11 @@ public class AppCacheUtils {
      */
     public void put(String key, String value) {
 
-        if (StringUtils.isEmpty(key)) {
+        if (cn.finalteam.toolsfinal.StringUtils.isEmpty(key)) {
             return;
         }
 
-        if ( StringUtils.isEmpty(value) ) {
+        if ( cn.finalteam.toolsfinal.StringUtils.isEmpty(value) ) {
             value = "";
         }
         File file = newFile(key);
@@ -120,7 +116,7 @@ public class AppCacheUtils {
      * @param value 保存的数据
      */
     public void put(String key, byte[] value) {
-        if(value == null || value.length == 0 || StringUtils.isEmpty(key)){
+        if(value == null || value.length == 0 || cn.finalteam.toolsfinal.StringUtils.isEmpty(key)){
             return;
         }
         File file = newFile(key);
@@ -175,7 +171,7 @@ public class AppCacheUtils {
      * @param value 保存的value
      */
     public void put(String key, Serializable value) {
-        if(StringUtils.isEmpty(key) || value == null) {
+        if(cn.finalteam.toolsfinal.StringUtils.isEmpty(key) || value == null) {
             return;
         }
         ByteArrayOutputStream baos = null;
@@ -198,7 +194,7 @@ public class AppCacheUtils {
 
     public int getInt(String key, int defValue) {
         String sValue = getString(key);
-        if (!StringUtils.isEmpty(sValue)) {
+        if (!cn.finalteam.toolsfinal.StringUtils.isEmpty(sValue)) {
             try {
                 int iValue = Integer.parseInt(sValue);
                 return iValue;
@@ -211,7 +207,7 @@ public class AppCacheUtils {
 
     public float getFloat(String key, float defValue) {
         String sValue = getString(key);
-        if (!StringUtils.isEmpty(sValue)) {
+        if (!cn.finalteam.toolsfinal.StringUtils.isEmpty(sValue)) {
             try {
                 float fValue = Float.parseFloat(sValue);
                 return fValue;
@@ -224,7 +220,7 @@ public class AppCacheUtils {
 
     public Double getDouble(String key, double defValue) {
         String sValue = getString(key);
-        if (!StringUtils.isEmpty(sValue)) {
+        if (!cn.finalteam.toolsfinal.StringUtils.isEmpty(sValue)) {
             try {
                 double dValue = Double.parseDouble(sValue);
                 return dValue;
@@ -237,7 +233,7 @@ public class AppCacheUtils {
 
     public long getLong(String key, long defValue) {
         String sValue = getString(key);
-        if (!StringUtils.isEmpty(sValue)) {
+        if (!cn.finalteam.toolsfinal.StringUtils.isEmpty(sValue)) {
             try {
                 long dValue = Long.parseLong(sValue);
                 return dValue;
@@ -250,7 +246,7 @@ public class AppCacheUtils {
 
     public boolean getBoolean(String key, boolean defValue) {
         String sValue = getString(key);
-        if (!StringUtils.isEmpty(sValue)) {
+        if (!cn.finalteam.toolsfinal.StringUtils.isEmpty(sValue)) {
             try {
                 boolean bValue = Boolean.parseBoolean(sValue);
                 return bValue;
@@ -267,7 +263,7 @@ public class AppCacheUtils {
      * @return String 数据
      */
     public String getString(String key) {
-        if(StringUtils.isEmpty(key)) {
+        if(cn.finalteam.toolsfinal.StringUtils.isEmpty(key)) {
             return null;
         }
         File file = newFile(key);
@@ -303,7 +299,7 @@ public class AppCacheUtils {
      * @return Serializable 数据
      */
     public Object getObject(String key) {
-        if ( StringUtils.isEmpty(key) ) {
+        if ( cn.finalteam.toolsfinal.StringUtils.isEmpty(key) ) {
             return null;
         }
         byte[] data = getBinary(key);
@@ -340,7 +336,7 @@ public class AppCacheUtils {
      * @return byte 数据
      */
     public byte[] getBinary(String key) {
-        if ( StringUtils.isEmpty(key) ) {
+        if ( cn.finalteam.toolsfinal.StringUtils.isEmpty(key) ) {
             return null;
         }
         RandomAccessFile rAFile = null;
