@@ -475,4 +475,8 @@ public class DateUtils {
         String date = format(d, "yyyy-MM-dd HH:mm:ss");
         return getTimeInterval(date);
     }
+
+    public static String getTimeInterval(long time){
+        return getTimeInterval(new Date(time));
+    }
 }
